@@ -31,15 +31,20 @@
                 <td>{{ $buku->kategori->nama }}</td>
                 {{-- Perbaikan A1: {{ }} melakukan escaping, skrip tampil sebagai teks --}}
                 <td><a href="{{ route('buku.show', ['id' => $buku->id]) }}">
-                        {{!! $buku->judul !!}}</a></td>
+                        {{$buku->judul }}</a></td>
                 <td>{{ $buku->penulis }}</td>
                 <td>{{ $buku->tahun_terbit }}</td>
                 @can('kelola-buku')
                 <td class="aksi">
-                    <a href="{{ route('buku.edit', $buku) }}" class="tombol tombol--kecil tombol--peringatan">Ubah</a>
-                    {{-- A3 Soal 1: sengaja menggunakan tautan GET untuk membuktikan CSRF. --}}
-                    <a href="{{ route('buku.hapus', $buku) }}" class="tombol tombol--kecil tombol--bahaya"
-                        onclick="return confirm('Hapus buku ini?')">Hapus</a>
+                    <form action="{{ route('buku.destroy', $buku) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="tombol tombol--kecil tombol--bahaya"
+                            onclick="return confirm('Hapus buku ini?')">
+                            Hapus
+                        </button>
+                    </form>
                 </td>
                 @endcan
             </tr>

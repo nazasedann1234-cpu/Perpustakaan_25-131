@@ -67,13 +67,13 @@ class BukuController extends Controller
         return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui.');
     }
 
-    public function destroy(Buku $buku): RedirectResponse
+    public function destroy(Buku $buku)
     {
         $buku->delete();
 
-        return redirect()->route('buku.index')->with('success', 'Buku berhasil dihapus.');
+        return redirect()->route('buku.index')
+            ->with('success', 'Buku berhasil dihapus.');
     }
-
     /**
      * Perbaikan A2: nilai `judul` dikirim terpisah lewat query binding (placeholder ?),
      * sehingga selalu diperlakukan sebagai data, bukan bagian dari perintah SQL.
@@ -83,7 +83,8 @@ class BukuController extends Controller
         $judul = $request->query('judul');
 
         $hasil = DB::select(
-            "SELECT id, kategori_id, judul, penulis, tahun_terbit FROM bukus WHERE judul = '$judul'"
+            'SELECT id, kategori_id, judul, penulis, tahun_terbit FROM bukus WHERE judul = ?',
+            [$judul]
         );
 
         return response()->json($hasil);
